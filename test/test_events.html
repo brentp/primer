@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title>Primer Test</title>
+    <script src="./excanvas.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript"></script>
+    <script src="javascript/lib/primer.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    var p1;
+    jQuery(function() {
+        
+        p1 = new Primer('#p1', 900, 600)
+        // dont draw until all the boxes are added to the screen.
+        p1.autoDraw = false;
+        
+        for(var i=0; i < 2000; i++){
+            var s = new Primer.Layer()
+
+            // get some color variation.
+            if (! (i % 2)){
+                s.setFillStyle("#00ff" + Math.round(10 * Math.random()) + Math.round(10 * Math.random()))
+                s.setStrokeStyle("#0000ff");
+            } else if(! (i % 3)){
+                s.setFillStyle("#" + Math.round(10 * Math.random()) + Math.round(10 * Math.random()) + "ff00")
+                s.setStrokeStyle("#ff0000");
+            } else {
+                s.setFillStyle("#ff" + Math.round(10 * Math.random()) + Math.round(10 * Math.random()) + "00")
+                s.setStrokeStyle("#00ff00");
+            }
+            s.setLineWidth(2);
+            s.beginPath()
+            s.moveTo(0, 0)
+            s.lineTo(9, 0)
+            s.lineTo(9, 9)
+            s.lineTo(0, 9)
+            s.lineTo(0, 0)
+            s.fill()
+            s.stroke()
+
+            s.mouseover(function(){
+                this.setStrokeStyle("#ff0000", true);
+                this.draw();
+            });
+            s.mouseout(function(){
+                this.setStrokeStyle("#0000ff", true);
+                this.draw();
+            });
+            s.click(function(){
+                this.parent.removeChild(this);
+            });
+            
+            s.x = Math.random() * 900;
+            s.y = Math.random() * 600;
+
+            p1.addChild(s);
+        }
+
+        p1.autoDraw = true;
+        p1.root.setVisible(true);
+
+        var s = new Primer.Layer()
+        s.setX(200);
+        s.setY(20);
+        s.setStrokeStyle("#0000FF")
+        s.setFillStyle("#FF0000")
+        s.beginPath()
+        s.moveTo(0, 0)
+        s.lineTo(20, 0)
+        s.lineTo(20, 20)
+        s.lineTo(0, 20)
+        s.fill()
+
+    // note can attach an event to each
+    // object and use 'this' to refer to
+    // that object.
+        s.mousemove(function(e){
+            this.setX(e.localX); 
+            this.setY(e.localY); 
+        });
+        p1.addChild(s);
+
+
+        
+      })
+    </script>
+  </head>
+  <body>
+    <p>Testing 2000 objects with click/mouseover/mouseout properties.</p>
+    <div id="p1"></div>
+  </body>
+</html>
